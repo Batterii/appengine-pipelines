@@ -22,7 +22,8 @@
 var AUTO_REFRESH = true;
 var ROOT_PIPELINE_ID = null;
 var STATUS_MAP = null;
-var LANG = null;
+//NPF added
+var NAMESPACE = null;
 
 
 // Adjusts the height/width of the embedded status console iframe.
@@ -782,6 +783,8 @@ function handleAutoRefreshClick(event) {
   } else if (AUTO_REFRESH && !event.target.checked) {
     newSearch = '?root=' + ROOT_PIPELINE_ID + '&auto=false';
   }
+  //NPF ADDED
+  if (NAMESPACE) { newSearch += "&ns=" + NAMESPACE; }
 
   if (newSearch != null) {
     loc.replace(
@@ -798,6 +801,8 @@ function handleRefreshClick(event) {
   } else {
     newSearch = '?root=' + ROOT_PIPELINE_ID + '&auto=false';
   }
+  //NPF added
+  if (NAMESPACE) { newSearch += "&ns=" + NAMESPACE; }
   loc.href = loc.protocol + '//' + loc.host + loc.pathname + newSearch;
   return false;
 }
@@ -869,6 +874,9 @@ function initStatus() {
         if (ROOT_PIPELINE_ID.match(/^pipeline-/)) {
           ROOT_PIPELINE_ID = ROOT_PIPELINE_ID.substring(9);
         }
+      //NPF added
+      } else if (mapping[0] == 'ns') {
+        NAMESPACE = mapping[1];
       }
     });
   }
@@ -884,7 +892,7 @@ function initStatus() {
   var attempts = 1;
   var ajaxRequest = {
     type: 'GET',
-    url: 'rpc/tree?root_pipeline_id=' + ROOT_PIPELINE_ID,
+    url: 'rpc/tree?root_pipeline_id=' + ROOT_PIPELINE_ID + (NAMESPACE?'&ns='+NAMESPACE:''), //NPF modified
     dataType: 'text',
     error: function(request, textStatus) {
       if (request.status == 404) {
@@ -954,6 +962,8 @@ function initStatusDone() {
       window.setTimeout(function() {
         var loc = window.location;
         var search = '?root=' + ROOT_PIPELINE_ID;
+        //NPF added
+        if (NAMESPACE) { search += "&ns=" + NAMESPACE; }
         loc.replace(loc.protocol + '//' + loc.host + loc.pathname + search);
       }, 30 * 1000);
     }
