@@ -810,7 +810,7 @@ function handleRefreshClick(event) {
 function handleDeleteClick(event) {
   var ajaxRequest = {
     type: 'GET',
-    url: 'rpc/delete?root_pipeline_id=' + ROOT_PIPELINE_ID,
+    url: 'rpc/delete?root_pipeline_id=' + ROOT_PIPELINE_ID + (NAMESPACE?'&ns='+NAMESPACE:''), //NPF modified
     dataType: 'text',
     error: function(request, textStatus) {
       if (request.status == 404) {
@@ -835,7 +835,7 @@ function handleDeleteClick(event) {
 function handleAbortClick(event) {
   var ajaxRequest = {
     type: 'GET',
-    url: 'rpc/abort?root_pipeline_id=' + ROOT_PIPELINE_ID,
+    url: 'rpc/abort?root_pipeline_id=' + ROOT_PIPELINE_ID + (NAMESPACE?'&ns='+NAMESPACE:''), //NPF modified
     dataType: 'text',
     error: function(request, textStatus) {
       setButter('Abort request failed: ' + textStatus);
