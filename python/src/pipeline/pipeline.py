@@ -1624,13 +1624,15 @@ class _PipelineContext(object):
           # contention on the _PipelineRecord entity.
           countdown = 1
         pipeline_key = _BarrierRecord.target.get_value_for_datastore(barrier)
+        pipeline_record = db.get(pipeline_key)
         logging.debug('Firing barrier %r', barrier.key())
         task_list.append(taskqueue.Task(
             url=path,
             countdown=countdown,
             name='ae-barrier-fire-%s-%s' % (pipeline_key.name(), purpose),
             params=dict(pipeline_key=pipeline_key, purpose=purpose),
-            headers={'X-Ae-Pipeline-Key': pipeline_key}))
+            headers={'X-Ae-Pipeline-Key': pipeline_key},
+            target=pipeline_record.params['target']))
       else:
         logging.debug('Not firing barrier %r, Waiting for slots: %r',
                       barrier.key(), pending_slots)
@@ -2006,6 +2008,13 @@ class _PipelineContext(object):
       return
     if pipeline_record.status not in (
         _PipelineRecord.WAITING, _PipelineRecord.RUN):
+
+      # If we're attempting to abort an already aborted pipeline,
+      # we silently advance. #50
+      if (pipeline_record.status == _PipelineRecord.ABORTED and
+            purpose == _BarrierRecord.ABORT):
+        return
+
       logging.error('Pipeline ID "%s" in bad state for purpose "%s": "%s"',
                     pipeline_key.name(), purpose or _BarrierRecord.START,
                     pipeline_record.status)
@@ -2599,7 +2608,8 @@ class _PipelineContext(object):
             params=dict(pipeline_key=pipeline_key,
                         purpose=_BarrierRecord.START,
                         attempt=pipeline_record.current_attempt),
-            headers={'X-Ae-Pipeline-Key': pipeline_key})
+            headers={'X-Ae-Pipeline-Key': pipeline_key},
+            target=pipeline_record.params['target'])
         task.add(queue_name=self.queue_name, transactional=True)
 
       pipeline_record.put()
