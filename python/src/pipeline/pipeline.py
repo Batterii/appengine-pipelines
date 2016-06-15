@@ -1541,8 +1541,6 @@ class _PipelineContext(object):
     if not isinstance(slot_key, db.Key):
       slot_key = db.Key(slot_key)
     logging.debug('Notifying slot %r', slot_key)
-    # use_barrier_indexes = False  # NPF added until there is a resolution for issue #42
-    #                              #     https://github.com/GoogleCloudPlatform/appengine-pipelines/issues/42
 
     if use_barrier_indexes:
       # Please see models.py:_BarrierIndex to understand how _BarrierIndex
