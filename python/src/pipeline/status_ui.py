@@ -136,6 +136,12 @@ class _BaseRpcHandler(webapp.RequestHandler):
       self.response.set_status(403)
       return
 
+    #NPF ADDED
+    ns = self.request.get('ns')
+    from google.appengine.api import namespace_manager
+    if ns: namespace_manager.set_namespace(ns)
+
+
     self.json_response = {}
     try:
       self.handle()
@@ -161,11 +167,6 @@ class _TreeStatusHandler(_BaseRpcHandler):
 
   def handle(self):
     import pipeline  # Break circular dependency
-    from google.appengine.api import namespace_manager
-
-    #NPF ADDED
-    ns = self.request.get('ns')
-    if ns: namespace_manager.set_namespace(ns)
 
     self.json_response.update(
         pipeline.get_status_tree(self.request.get('root_pipeline_id')))
