@@ -18,7 +18,7 @@
  * @author: Brett Slatkin (bslatkin@google.com)
  */
 
-// NPF ADDED - namespace option
+// BATTERII ADDED - namespace option
 function qs(key) {
     key = key.replace(/[*+?^$.\[\]{}()|\\\/]/g, "\\$&"); // escape RegEx meta chars
     var match = location.search.match(new RegExp("[?&]"+key+"=([^&]+)(&|$)"));
@@ -56,7 +56,7 @@ function initRootListDone(response) {
       // Prepend the cursor to the next link. This may have a suffix of
       // the class_path from initRootNamesDone() below.
       var href = $('#next-link').attr('href');
-      $('#next-link').attr('href', '?ns='+getNS()+'&cursor=' + response.cursor + href);  //NPF MODIFIED
+      $('#next-link').attr('href', '?ns='+getNS()+'&cursor=' + response.cursor + href);  //BATTERII MODIFIED
       $('#next-link').show();
     }
 
@@ -86,7 +86,7 @@ function initRootListDone(response) {
       $('<td class="links">')
           .append(
             $('<a>')
-                .attr('href', 'status?ns='+getNS()+'&root=' + infoMap.pipelineId)  //NPF MODIFIED
+                .attr('href', 'status?ns='+getNS()+'&root=' + infoMap.pipelineId)  //BATTERII MODIFIED
                 .text(infoMap.pipelineId))
           .appendTo(row);
       $('#root-list>tbody').append(row);
@@ -103,7 +103,7 @@ function initRootNames() {
   setButter('Loading names...');
   $.ajax({
     type: 'GET',
-    url: 'rpc/class_paths?ns='+getNS(),  //NPF MODIFIED
+    url: 'rpc/class_paths?ns='+getNS(),  //BATTERII MODIFIED
     dataType: 'text',
     error: function(request, textStatus) {
       getResponseDataJson(textStatus);
@@ -135,11 +135,11 @@ function initRootNamesDone(response) {
         // Append the class name selected to the "next page" link. This
         // may already have a value from initRootListDone() above.
         var href = $('#next-link').attr('href');
-        $('#next-link').attr('href', href + '&ns='+getNS()+'&class_path=' + path);  //NPF MODIFIED
+        $('#next-link').attr('href', href + '&ns='+getNS()+'&class_path=' + path);  //BATTERII MODIFIED
       }
       option.appendTo(filterMenu);
     });
     
-    $('#ns').val(getNS());  //NPF ADDED
+    $('#ns').val(getNS());  //BATTERII ADDED
   }
 }

@@ -23,7 +23,7 @@ var AUTO_REFRESH = true;
 var ROOT_PIPELINE_ID = null;
 var STATUS_MAP = null;
 
-// NPF ADDED - namespace option
+// BATTERII ADDED - namespace option
 function qs(key) {
     key = key.replace(/[*+?^$.\[\]{}()|\\\/]/g, "\\$&"); // escape RegEx meta chars
     var match = location.search.match(new RegExp("[?&]"+key+"=([^&]+)(&|$)"));
@@ -768,7 +768,7 @@ function handleAutoRefreshClick(event) {
   } else if (AUTO_REFRESH && !event.target.checked) {
     newSearch = '?root=' + ROOT_PIPELINE_ID + '&auto=false';
   }
-  newSearch += "&ns=" + getNS();  //NPF ADDED
+  newSearch += "&ns=" + getNS();  //BATTERII ADDED
 
   if (newSearch != null) {
     loc.replace(
@@ -785,7 +785,7 @@ function handleRefreshClick(event) {
   } else {
     newSearch = '?root=' + ROOT_PIPELINE_ID + '&auto=false';
   }
-  newSearch += "&ns=" + getNS();  //NPF ADDED
+  newSearch += "&ns=" + getNS();  //BATTERII ADDED
   loc.href = loc.protocol + '//' + loc.host + loc.pathname + newSearch;
   return false;
 }
@@ -793,7 +793,7 @@ function handleRefreshClick(event) {
 function handleDeleteClick(event) {
   var ajaxRequest = {
     type: 'GET',
-    url: 'rpc/delete?root_pipeline_id=' + ROOT_PIPELINE_ID + '&ns='+getNS(), //NPF modified
+    url: 'rpc/delete?root_pipeline_id=' + ROOT_PIPELINE_ID + '&ns='+getNS(), //BATTERII modified
     dataType: 'text',
     error: function(request, textStatus) {
       if (request.status == 404) {
@@ -818,7 +818,7 @@ function handleDeleteClick(event) {
 function handleAbortClick(event) {
   var ajaxRequest = {
     type: 'GET',
-    url: 'rpc/abort?root_pipeline_id=' + ROOT_PIPELINE_ID + '&ns='+getNS(), //NPF modified
+    url: 'rpc/abort?root_pipeline_id=' + ROOT_PIPELINE_ID + '&ns='+getNS(), //BATTERII modified
     dataType: 'text',
     error: function(request, textStatus) {
       setButter('Abort request failed: ' + textStatus);
@@ -872,7 +872,7 @@ function initStatus() {
   var attempts = 1;
   var ajaxRequest = {
     type: 'GET',
-    url: 'rpc/tree?root_pipeline_id=' + ROOT_PIPELINE_ID + '&ns='+getNS(), //NPF modified
+    url: 'rpc/tree?root_pipeline_id=' + ROOT_PIPELINE_ID + '&ns='+getNS(), //BATTERII modified
     dataType: 'text',
     error: function(request, textStatus) {
       if (request.status == 404) {
@@ -941,7 +941,7 @@ function initStatusDone() {
       // Only do auto-refresh behavior if we're not in a terminal state.
       window.setTimeout(function() {
         var loc = window.location;
-        var search = '?ns=' + getNS() + '&root=' + ROOT_PIPELINE_ID;  //NPF MODIFIED
+        var search = '?ns=' + getNS() + '&root=' + ROOT_PIPELINE_ID;  //BATTERII MODIFIED
         loc.replace(loc.protocol + '//' + loc.host + loc.pathname + search);
       }, 30 * 1000);
     }

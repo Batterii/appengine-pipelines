@@ -1700,7 +1700,7 @@ class _PipelineContext(object):
       task = taskqueue.Task(
           url=self.fanout_abort_handler_path,
           params=dict(root_pipeline_key=root_pipeline_key),
-          target=pipeline_record.params['target'])
+          target=pipeline_record.params['target']) # BATTERII ADDED - run in specified target service
       task.add(queue_name=self.queue_name, transactional=True)
       return True
 
